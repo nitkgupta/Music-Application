@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 //        val array = arrayOfNulls<String>(list.size)
 //        val arrayAdapter=ArrayAdapter<String>(this@MainActivity,android.R.layout.simple_list_item_1,list2.toArray(array))
 
-        searchView.queryHint="Search Music ..."
+        searchView.queryHint = "Search Music ..."
         var check = object : MyAdapter.Checkandwork {
             override fun update(pos: Int) {
                 if (!musicBound) {

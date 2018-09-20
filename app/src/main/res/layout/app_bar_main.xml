@@ -19,11 +19,11 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
 
-                <SearchView
-                    android:id="@+id/search_view"
-                    android:layout_gravity="end"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+            <SearchView
+                android:id="@+id/search_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end" />
 
         </android.support.v7.widget.Toolbar>
 
@@ -32,9 +32,9 @@
     <include layout="@layout/content_main" />
 
     <include
+        layout="@layout/layout_second"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        layout="@layout/layout_second"/>
+        android:layout_gravity="bottom" />
 
 </android.support.design.widget.CoordinatorLayout>
