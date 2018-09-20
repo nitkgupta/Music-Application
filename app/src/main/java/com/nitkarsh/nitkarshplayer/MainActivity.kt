@@ -1,9 +1,11 @@
 package com.nitkarsh.nitkarshplayer
 
 import android.content.*
+import android.media.MediaPlayer
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.IBinder
+import android.os.Parcelable
 import android.provider.MediaStore
 import android.support.constraint.ConstraintLayout
 import android.support.v4.view.GravityCompat
@@ -16,8 +18,11 @@ import android.support.v7.widget.Toolbar
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.Toast
+import com.nitkarsh.adapter.AllData
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import android.content.Intent
+import android.support.v4.content.LocalBroadcastManager
 
 
 class MainActivity : AppCompatActivity() {
@@ -27,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var toolbar1: Toolbar
     private lateinit var constraintLayout: ConstraintLayout
     private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerNav: RecyclerView
     private lateinit var imageLoop: ImageView
     private lateinit var imagePrevious: ImageView
     private lateinit var imageNext: ImageView
@@ -35,9 +41,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var list: ArrayList<Audio>
     private lateinit var musicService: MusicService
     private var musicBound: Boolean = false
+    private var started=0
+    private var mediaPlayer:MediaPlayer= MediaPlayer()
     private var i = 0
     private lateinit var intent1: Intent
     private lateinit var serviceConnection: ServiceConnection
+    private lateinit var listNav: ArrayList<Any>
 //    private lateinit var list2 : ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,10 +61,15 @@ class MainActivity : AppCompatActivity() {
         imageStop = findViewById(R.id.image_stop)
         imagePrevious = findViewById(R.id.image_previous)
         recyclerView = findViewById(R.id.recycle_view)
+        recyclerNav = findViewById(R.id.recycler_nav_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerNav.layoutManager = LinearLayoutManager(this)
         recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         var helps = Helps(contentResolver)
         list = helps.execute().get()
+        var data=AllData()
+        listNav=data.getData()
+        recyclerNav.adapter=MyNavAdapter(this,listNav,drawer_layout,recyclerNav.layoutManager)
 //        list2=ArrayList<String>()
 //        for(j in 1..list.size){
 //            list2.add(list.get(j-1).title!!)
@@ -69,6 +83,7 @@ class MainActivity : AppCompatActivity() {
                 if (!musicBound) {
                     imagePlay.setImageResource(R.drawable.pause)
                     musicBound = true
+                    started=1
                     i = pos
                     Toast.makeText(this@MainActivity, "Playing Music : ${list.get(i).title}", Toast.LENGTH_LONG).show()
                     intent1.putExtra("dataSource", list.get(i).data)
@@ -88,7 +103,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         musicService = MusicService()
-        intent1 = Intent(this@MainActivity, MusicService::class.java)
+
+        intent1 = Intent(this@MainActivity, musicService::class.java)
         serviceConnection = object : ServiceConnection {
             override fun onServiceDisconnected(name: ComponentName?) {
                 musicBound = false
@@ -102,26 +118,38 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = MyAdapter(this, this@MainActivity, list, check)
 
         imagePlay.setOnClickListener { view ->
-            if (!musicBound) {
+
+            if (!musicBound && started==0) {
                 imagePlay.setImageResource(R.drawable.pause)
                 musicBound = true
                 Toast.makeText(this, "Playing Music : ${list.get(i).title}", Toast.LENGTH_LONG).show()
+                started=1
                 intent1.putExtra("dataSource", list.get(i).data)
                 bindService(intent1, serviceConnection, Context.BIND_AUTO_CREATE)
                 startService(intent1)
-            } else {
+            } else if(musicBound && started==1) {
                 imagePlay.setImageResource(R.drawable.play)
-                musicBound = false
-                unbindService(serviceConnection)
-                stopService(intent1)
+                musicBound = true
+                started=0
+                val intent = Intent("com.nitkarsh.broadcast.SOME_ACTION")
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+            }
+            else if(musicBound && started==0){
+                imagePlay.setImageResource(R.drawable.pause)
+                started=1
+                val intent = Intent("com.nitkarsh.broadcast.SOME_ACTION")
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
             }
 
         }
+
+
 
         imageStop.setOnClickListener { view ->
             if (musicBound) {
                 imagePlay.setImageResource(R.drawable.play)
                 musicBound = false
+                started=0
                 Toast.makeText(this, "Stopped Playing Music", Toast.LENGTH_LONG).show()
                 unbindService(serviceConnection)
                 stopService(intent1)
@@ -147,6 +175,7 @@ class MainActivity : AppCompatActivity() {
                     i--;
                     imagePlay.setImageResource(R.drawable.pause)
                     musicBound = true
+                    started=1
                     Toast.makeText(this, "Playing Music : ${list.get(i).title}", Toast.LENGTH_LONG).show()
                     intent1.putExtra("dataSource", list.get(i).data)
                     bindService(intent1, serviceConnection, Context.BIND_AUTO_CREATE)
@@ -176,6 +205,7 @@ class MainActivity : AppCompatActivity() {
                     i++;
                     imagePlay.setImageResource(R.drawable.pause)
                     musicBound = true
+                    started=1
                     Toast.makeText(this, "Playing Music : ${list.get(i).title}", Toast.LENGTH_LONG).show()
                     intent1.putExtra("dataSource", list.get(i).data)
                     bindService(intent1, serviceConnection, Context.BIND_AUTO_CREATE)
@@ -197,6 +227,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 imagePlay.setImageResource(R.drawable.pause)
                 musicBound = true
+                started=1
                 Toast.makeText(this, "Playing Music : ${list.get(i).title}", Toast.LENGTH_LONG).show()
                 intent1.putExtra("dataSource", list.get(i).data)
                 bindService(intent1, serviceConnection, Context.BIND_AUTO_CREATE)
@@ -262,5 +293,6 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
 
 }

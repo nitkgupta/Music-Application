@@ -22,16 +22,6 @@ class ViewTags(context: Context, itemView: View, drawerLayout: DrawerLayout, lay
         textTag = itemView.findViewById(R.id.text_tag)
         constraintLayout = itemView.findViewById(R.id.layout_inflate)
         constraintLayout.setOnClickListener {
-            if (last_position == -1) {
-                constraintLayout.setBackgroundColor(context.resources.getColor(R.color.colorTint))
-                last_position = adapterPosition
-            } else {
-                constraintLayout.setBackgroundColor(context.resources.getColor(R.color.colorTint))
-                constraintLayout = layoutManager.findViewByPosition(last_position).findViewById(R.id.layout_inflate)
-                constraintLayout.setBackgroundColor(context.resources.getColor(R.color.colorGone))
-                last_position = adapterPosition
-                constraintLayout = layoutManager.findViewByPosition(last_position).findViewById(R.id.layout_inflate)
-            }
             Toast.makeText(context, "Item Clicked at Position $adapterPosition", Toast.LENGTH_LONG).show()
             drawerLayout.closeDrawer(GravityCompat.START)
         }

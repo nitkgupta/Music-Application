@@ -22,10 +22,6 @@
             android:name=".MusicService"
             android:enabled="true"
             android:exported="false" />
-        <service
-            android:name=".MyService"
-            android:enabled="true"
-            android:exported="true" />
 
         <activity android:name=".SplashActivity">
             <intent-filter>
@@ -34,6 +30,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
