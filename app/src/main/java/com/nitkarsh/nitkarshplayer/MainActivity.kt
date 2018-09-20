@@ -16,7 +16,6 @@ import android.support.v7.widget.Toolbar
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.Toast
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -26,7 +25,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var searchView: SearchView
     private lateinit var toolbar1: Toolbar
-    private lateinit var slidingUpPanelLayout: SlidingUpPanelLayout
     private lateinit var constraintLayout: ConstraintLayout
     private lateinit var recyclerView: RecyclerView
     private lateinit var imageLoop: ImageView
@@ -48,14 +46,12 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar1 = findViewById(R.id.toolbar)
         searchView = findViewById(R.id.search_view)
-        slidingUpPanelLayout = findViewById(R.id.sliding_layout)
         imageLoop = findViewById(R.id.image_restart)
         imageNext = findViewById(R.id.image_next)
         imagePlay = findViewById(R.id.image_play)
         imageStop = findViewById(R.id.image_stop)
         imagePrevious = findViewById(R.id.image_previous)
-        constraintLayout = slidingUpPanelLayout.findViewById(R.id.constraint_main)
-        recyclerView = constraintLayout.findViewById(R.id.recycle_view)
+        recyclerView = findViewById(R.id.recycle_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         var helps = Helps(contentResolver)

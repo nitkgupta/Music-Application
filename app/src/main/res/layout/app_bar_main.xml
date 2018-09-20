@@ -29,22 +29,12 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <include layout="@layout/content_main" />
 
-
-    <com.sothree.slidinguppanel.SlidingUpPanelLayout
-        xmlns:sothree="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/sliding_layout"
+    <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:background="@color/darkness"
-        sothree:umanoShadowHeight="2dp"
-        sothree:umanoPanelHeight="50dp">
-
-        <include layout="@layout/content_main" />
-
-        <include layout="@layout/layout_second"/>
-
-    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+        android:layout_gravity="bottom"
+        layout="@layout/layout_second"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -52,6 +52,7 @@ class SplashActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         var view = findViewById<View>(android.R.id.content)
         if (grantResults.get(0) == -1) {
+
             Snackbar.make(view, "Please grant Permissions for this app to work.", Snackbar.LENGTH_INDEFINITE).setAction("Give Permissions", View.OnClickListener {
                 var check = PermissionCheck(this, this@SplashActivity)
                 check.permissionGranted()
