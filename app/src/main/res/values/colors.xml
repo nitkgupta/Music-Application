@@ -7,5 +7,7 @@
     <color name="white">#ffffff</color>
     <color name="colorDark">#e7202020</color>
     <color name="darkness">#242121</color>
+    <color name="colorTint">#e2e0e1</color>
+    <color name="colorGone">#00ffffff</color>
 
 </resources>
